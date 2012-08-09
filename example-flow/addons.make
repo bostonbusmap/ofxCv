@@ -1,2 +1,6 @@
 ofxOpenCv
 ofxCv
+ofxControlPanel
+ofxXmlSettings
+ofxDirList
+ofxVectorMath
