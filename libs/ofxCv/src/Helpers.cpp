@@ -114,7 +114,9 @@ namespace ofxCv {
 		int height = lines.size() * fontSize * leading - 1;
 		int width = textLength * fontSize;
 		
+#ifndef TARGET_ANDROID
 		glPushAttrib(GL_DEPTH_BUFFER_BIT);
+#endif
 		glDisable(GL_DEPTH_TEST);
 		ofPushStyle();
 		ofSetColor(background);
@@ -127,6 +129,8 @@ namespace ofxCv {
 		ofDrawBitmapString(text, x + 1, y + fontSize + 2);
 		ofPopMatrix();
 		ofPopStyle();
+#ifndef TARGET_ANDROID
 		glPopAttrib();
+#endif
 	}
 }

@@ -53,10 +53,18 @@ namespace ofxCv {
 		float fy = cameraMatrix.at<double>(1, 1);
 		float cx = principalPoint.x;
 		float cy = principalPoint.y;
+#ifndef TARGET_ANDROID
 		glFrustum(
 			nearDist * (-cx) / fx, nearDist * (w - cx) / fx,
 			nearDist * (cy - h) / fy, nearDist * (cy) / fy,
 			nearDist, farDist);
+#else
+		// TODO: is this common in all of OpenGL ES?
+		glFrustumf(
+			nearDist * (-cx) / fx, nearDist * (w - cx) / fx,
+			nearDist * (cy - h) / fy, nearDist * (cy) / fy,
+			nearDist, farDist);
+#endif
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		gluLookAt(
