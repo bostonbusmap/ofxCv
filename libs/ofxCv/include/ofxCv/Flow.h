@@ -32,6 +32,8 @@ namespace ofxCv {
 		int  getWidth();
         int  getHeight();
         
+		virtual std::vector<Point2f> getPointsPrev() = 0;
+		virtual std::vector<Point2f> getPointsNext() = 0;
 	protected:
 		ofImage last, curr;
 		bool hasFlow;
@@ -71,6 +73,8 @@ namespace ofxCv {
         int getWidth();
         int getHeight();
         
+		virtual std::vector<Point2f> getPointsPrev();
+		virtual std::vector<Point2f> getPointsNext();
 	protected:
 		
 		void drawFlow(ofRectangle r);
@@ -118,6 +122,8 @@ namespace ofxCv {
         int getWidth();
         int getHeight();
         
+		virtual std::vector<Point2f> getPointsPrev();
+		virtual std::vector<Point2f> getPointsNext();
 	protected:
 		cv::Mat flow;
 		

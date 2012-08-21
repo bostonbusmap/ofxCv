@@ -28,8 +28,8 @@ namespace ofxCv {
 	class Intrinsics {
 	public:
 		// kinect is 6.66mm(H) x 5.32mm(V)
-		void setup(Mat cameraMatrix, cv::Size imageSize, cv::Size sensorSize = cv::Size(0, 0));
-		Mat getCameraMatrix() const;
+		void setup(Matx33d cameraMatrix, cv::Size imageSize, cv::Size sensorSize = cv::Size(0, 0));
+		Matx33d getCameraMatrix() const;
 		cv::Size getImageSize() const;
 		cv::Size getSensorSize() const;
 		cv::Point2d getFov() const;
@@ -38,7 +38,7 @@ namespace ofxCv {
 		Point2d getPrincipalPoint() const;
 		void loadProjectionMatrix(float nearDist = 10., float farDist = 10000.) const;
 	protected:
-		Mat cameraMatrix;
+		Matx33d cameraMatrix;
 		cv::Size imageSize, sensorSize;
 		cv::Point2d fov;
 		double focalLength, aspectRatio;

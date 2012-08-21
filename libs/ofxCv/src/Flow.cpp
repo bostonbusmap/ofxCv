@@ -139,6 +139,17 @@ namespace ofxCv {
 		}
 	}
 	
+	std::vector<Point2f> FlowPyrLK::getPointsPrev() {
+		// WARNING: not a copy
+		return prevPts;
+	}
+
+	std::vector<Point2f> FlowPyrLK::getPointsNext() {
+		// WARNING: not a copy
+		return nextPts;
+	}
+
+
 #pragma mark FARNEBACK IMPLEMENTATION
 	FlowFarneback::FlowFarneback(){
 	}
@@ -172,6 +183,35 @@ namespace ofxCv {
 		this->farnebackGaussian = gaussian;
 	}
 	
+	std::vector<Point2f> FlowFarneback::getPointsPrev() {
+		std::vector<cv::Point2f> ret;
+
+		// see drawFlow for stepSize value
+		int stepSize = 4;
+		for (int y = 0; y < flow.rows; y += stepSize) {
+			for (int x = 0; x < flow.cols; x += stepSize) {
+				ret.push_back(cv::Point2f(x, y));
+			}
+		}
+
+		return ret;
+	}
+
+	std::vector<Point2f> FlowFarneback::getPointsNext() {
+		std::vector<cv::Point2f> ret;
+
+		// see drawFlow for stepSize value
+		int stepSize = 4;
+		for (int y = 0; y < flow.rows; y += stepSize) {
+			for (int x = 0; x < flow.cols; x += stepSize) {
+				ofVec2f vec = getFlowPosition(x, y);
+				ret.push_back(toCv(vec));
+			}
+		}
+
+		return ret;
+	}
+
 	void FlowFarneback::calcFlow(){
 		int flags = OPTFLOW_USE_INITIAL_FLOW;
 		flags |= farnebackGaussian ? OPTFLOW_FARNEBACK_GAUSSIAN : 0;

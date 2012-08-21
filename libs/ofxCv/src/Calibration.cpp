@@ -6,7 +6,7 @@ namespace ofxCv {
 
 	using namespace cv;
 	
-	void Intrinsics::setup(Mat cameraMatrix, cv::Size imageSize, cv::Size sensorSize) {
+	void Intrinsics::setup(Matx33d cameraMatrix, cv::Size imageSize, cv::Size sensorSize) {
 		this->cameraMatrix = cameraMatrix;
 		this->imageSize = imageSize;
 		this->sensorSize = sensorSize;
@@ -15,7 +15,7 @@ namespace ofxCv {
 
 	}
 	
-	Mat Intrinsics::getCameraMatrix() const {
+	Matx33d Intrinsics::getCameraMatrix() const {
 		return cameraMatrix;
 	}
 	
@@ -49,8 +49,8 @@ namespace ofxCv {
 		glLoadIdentity();
 		float w = imageSize.width;
 		float h = imageSize.height;
-		float fx = cameraMatrix.at<double>(0, 0);
-		float fy = cameraMatrix.at<double>(1, 1);
+		float fx = cameraMatrix(0, 0);
+		float fy = cameraMatrix(1, 1);
 		float cx = principalPoint.x;
 		float cy = principalPoint.y;
 		glFrustum(
@@ -82,8 +82,8 @@ namespace ofxCv {
 		FileStorage fs(ofToDataPath(filename, absolute), FileStorage::WRITE);
 		cv::Size imageSize = distortedIntrinsics.getImageSize();
 		cv::Size sensorSize = distortedIntrinsics.getSensorSize();
-		Mat cameraMatrix = distortedIntrinsics.getCameraMatrix();
-		fs << "cameraMatrix" << cameraMatrix;
+		Matx33d cameraMatrix = distortedIntrinsics.getCameraMatrix();
+		fs << "cameraMatrix" << (Mat)cameraMatrix;
 		fs << "imageSize_width" << imageSize.width;
 		fs << "imageSize_height" << imageSize.height;
 		fs << "sensorSize_width" << sensorSize.width;
@@ -273,8 +273,8 @@ namespace ofxCv {
 			return false;
 		}
 		Mat fundamentalMatrix, essentialMatrix;
-		Mat cameraMatrix = distortedIntrinsics.getCameraMatrix();
-		Mat dstCameraMatrix = dst.getDistortedIntrinsics().getCameraMatrix();
+		Matx33d cameraMatrix = distortedIntrinsics.getCameraMatrix();
+		Matx33d dstCameraMatrix = dst.getDistortedIntrinsics().getCameraMatrix();
 		// uses CALIB_FIX_INTRINSIC by default
 		stereoCalibrate(objectPoints,
 										imagePoints, dst.imagePoints,
