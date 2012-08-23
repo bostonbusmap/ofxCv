@@ -50,22 +50,27 @@ namespace ofxCv {
 	
 	void Flow::draw(){
 		if(hasFlow) {
-			drawFlow(ofRectangle(0,0, last.getWidth(), last.getHeight() ));
+			drawFlow(ofRectangle(0,0, last.getWidth(), last.getHeight() ), 0, 0);
 		}
 	}
 	void Flow::draw(float x, float y){
 		if(hasFlow){
-			drawFlow(ofRectangle(x,y,last.getWidth(),last.getHeight()));
+			drawFlow(ofRectangle(x,y,last.getWidth(),last.getHeight()), 0, 0);
 		}
 	}
 	void Flow::draw(float x, float y, float width, float height){
 		if(hasFlow){
-			drawFlow(ofRectangle(x,y,width,height));
+			drawFlow(ofRectangle(x,y,width,height), 0, 0);
+		}
+	}
+	void Flow::draw(float x, float y, float width, float height, float x2, float y2){
+		if(hasFlow){
+			drawFlow(ofRectangle(x,y,width,height), x2, y2);
 		}
 	}
 	void Flow::draw(ofRectangle rect){
 		if(hasFlow){
-			drawFlow(rect);
+			drawFlow(rect, 0, 0);
 		}
 	}
     int Flow::getWidth()  { return 0; }
@@ -131,12 +136,19 @@ namespace ofxCv {
 		return toOf(prevPts).getVertices();
 	}
 	
-	void FlowPyrLK::drawFlow(ofRectangle rect) {
+	void FlowPyrLK::drawFlow(ofRectangle rect, float x2, float y2) {
 		ofVec2f offset(rect.x,rect.y);
 		ofVec2f scale(rect.width/last.getWidth(),rect.height/last.getHeight());
+		ofVec2f otherOffset(x2, y2);
+		ofPushStyle();
+		srand(0);
 		for(int i = 0; i < prevPts.size(); i++) {
-			ofLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset);
+			ofColor color = ofColor::fromHex(rand() % 0xffffff);
+			ofSetColor(color);
+			ofLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset + otherOffset);
+
 		}
+		ofPopStyle();
 	}
 	
 	std::vector<Point2f> FlowPyrLK::getPointsPrev() {
@@ -262,15 +274,20 @@ namespace ofxCv {
         return flow.rows;
     }
     
-	void FlowFarneback::drawFlow(ofRectangle rect){
+	void FlowFarneback::drawFlow(ofRectangle rect, float x2, float y2){
 		ofVec2f offset(rect.x,rect.y);
 		ofVec2f scale(rect.width/flow.cols, rect.height/flow.rows);
+		ofVec2f otherOffset(x2, y2);
 		int stepSize = 4; //TODO: make class-level parameteric
+		ofPushStyle();
+		srand(0);
 		for(int y = 0; y < flow.rows; y += stepSize) {
 			for(int x = 0; x < flow.cols; x += stepSize) {
 				ofVec2f cur = ofVec2f(x, y) * scale + offset;
-				ofLine(cur, getFlowPosition(x, y) * scale + offset);
+				ofColor color = ofColor::fromHex(rand() % 0xffffff);
+				ofLine(cur, getFlowPosition(x, y) * scale + offset + otherOffset);
 			} 
 		}
+		ofPopStyle();
 	}
 }

@@ -28,6 +28,7 @@ namespace ofxCv {
 		void draw();
 		void draw(float x, float y);
 		void draw(float x, float y, float width, float height);
+		void draw(float x, float y, float width, float height, float x2, float y2);
 		void draw(ofRectangle rect);
 		int  getWidth();
         int  getHeight();
@@ -41,7 +42,7 @@ namespace ofxCv {
 		//specific flow implementation
 		virtual void calcFlow() = 0;
 		//specific drawing implementation
-		virtual void drawFlow(ofRectangle r) = 0;
+		virtual void drawFlow(ofRectangle r, float x2, float y2) = 0;
 	};
 	
 	//there are two implementations of Flow
@@ -77,7 +78,7 @@ namespace ofxCv {
 		virtual std::vector<Point2f> getPointsNext();
 	protected:
 		
-		void drawFlow(ofRectangle r);
+		void drawFlow(ofRectangle r, float x2, float y2);
 		void calcFlow();
 		
 		vector<cv::Point2f> prevPts, nextPts;
@@ -127,7 +128,7 @@ namespace ofxCv {
 	protected:
 		cv::Mat flow;
 		
-		void drawFlow(ofRectangle rect);
+		void drawFlow(ofRectangle rect, float x2, float y2);
 		void calcFlow();
 		
 		float pyramidScale;
